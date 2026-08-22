@@ -1,6 +1,0 @@
-{
-  "name": "GlobeTrotter",
-  "description": "Plan the journey. Feel the adventure. Intelligent multi-city travel planning, interactive itineraries, budget tracking, and Travel Saarthi AI companion.",
-  "requestFramePermissions": ["geolocation"],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}
