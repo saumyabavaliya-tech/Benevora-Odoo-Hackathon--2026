@@ -6,7 +6,7 @@ export const FALLBACK_TRAVEL_IMAGES = [
   'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80', // coastal tropical beach
   'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=1200&q=80', // Taj Mahal / India heritage
   'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=1200&q=80', // Goa palm beach
-  'https://images.unsplash.com/photo-1596405835955-470a7d2b406b?auto=format&fit=crop&w=1200&q=80', // Ahmedabad heritage
+  'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=1200&q=80', // Ahmedabad Adalaj Stepwell heritage
   'https://images.unsplash.com/photo-1570168007204-dfb528c6958f?auto=format&fit=crop&w=1200&q=80', // Mumbai Gateway
   'https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=1200&q=80', // Jaipur palace
 ];

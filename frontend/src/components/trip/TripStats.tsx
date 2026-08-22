@@ -20,28 +20,28 @@ export const TripStats: React.FC<TripStatsProps> = ({ trip }) => {
       value: `${trip.totalDays} Days`,
       sub: `${trip.destinations.length} Cities planned`,
       icon: Calendar,
-      color: 'text-blue-600 bg-blue-50',
+      color: 'text-blue-300 bg-blue-500/20 border border-blue-400/30',
     },
     {
       label: 'Itinerary Items',
       value: `${trip.itinerary.length} Events`,
       sub: `${activitiesCount} Activities`,
       icon: CheckCircle2,
-      color: 'text-indigo-600 bg-indigo-50',
+      color: 'text-indigo-300 bg-indigo-500/20 border border-indigo-400/30',
     },
     {
       label: 'Total Budget',
       value: formatCurrency(trip.totalBudget, trip.currency),
       sub: `Spent: ${formatCurrency(totalSpent, trip.currency)}`,
       icon: Wallet,
-      color: 'text-emerald-600 bg-emerald-50',
+      color: 'text-emerald-300 bg-emerald-500/20 border border-emerald-400/30',
     },
     {
       label: 'Remaining',
       value: formatCurrency(remainingBudget, trip.currency),
       sub: `${Math.round((remainingBudget / (trip.totalBudget || 1)) * 100)}% budget available`,
       icon: MapPin,
-      color: 'text-amber-600 bg-amber-50',
+      color: 'text-amber-300 bg-amber-500/20 border border-amber-400/30',
     },
   ];
 
@@ -52,21 +52,21 @@ export const TripStats: React.FC<TripStatsProps> = ({ trip }) => {
         return (
           <div
             key={idx}
-            className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs flex flex-col justify-between"
+            className="bg-slate-900/70 backdrop-blur-2xl p-4 sm:p-5 rounded-3xl border border-white/15 shadow-xl flex flex-col justify-between"
           >
             <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-300">
                 {stat.label}
               </span>
-              <div className={`p-2 rounded-xl ${stat.color}`}>
+              <div className={`p-2 rounded-xl backdrop-blur-md ${stat.color}`}>
                 <Icon className="w-4 h-4" />
               </div>
             </div>
             <div>
-              <p className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
+              <p className="text-xl sm:text-2xl font-black text-white tracking-tight">
                 {stat.value}
               </p>
-              <p className="text-xs text-slate-500 mt-0.5">{stat.sub}</p>
+              <p className="text-xs text-slate-300 mt-1 font-medium">{stat.sub}</p>
             </div>
           </div>
         );

@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Compass, ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { Input } from '../components/common/Input';
 import { Button } from '../components/common/Button';
+import { BrandLogo } from '../components/common/BrandLogo';
 
 const signupSchema = z
   .object({
@@ -23,8 +24,14 @@ const signupSchema = z
 type SignupFormData = z.infer<typeof signupSchema>;
 
 export const Signup: React.FC = () => {
-  const { signup } = useAuth();
+  const { signup, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/dashboard', { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
 
   const {
     register,
@@ -33,10 +40,10 @@ export const Signup: React.FC = () => {
   } = useForm<SignupFormData>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
-      name: 'Het Beladiya',
-      email: 'het.beladiya@example.com',
-      password: 'password123',
-      confirmPassword: 'password123',
+      name: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
     },
   });
 
@@ -50,11 +57,8 @@ export const Signup: React.FC = () => {
       <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-indigo-600/20 blur-[120px] rounded-full pointer-events-none" />
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center relative z-10">
-        <Link to="/" className="inline-flex items-center gap-2.5 group">
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/25 group-hover:scale-105 transition-transform">
-            <Compass className="w-5 h-5 text-white" />
-          </div>
-          <span className="text-2xl font-black tracking-tight text-white">GlobeTrotter</span>
+        <Link to="/" className="inline-flex items-center group">
+          <BrandLogo size="xl" showTagline={false} />
         </Link>
         <h2 className="mt-6 text-3xl font-extrabold text-white tracking-tight">
           Create an account
@@ -70,7 +74,7 @@ export const Signup: React.FC = () => {
             <div className="space-y-1">
               <label className="text-xs font-semibold text-slate-300">Full Name</label>
               <Input
-                placeholder="Het Beladiya"
+                placeholder="John Doe"
                 error={errors.name?.message}
                 {...register('name')}
                 className="bg-slate-950/60 border-slate-700 text-white placeholder:text-slate-500"
@@ -81,7 +85,7 @@ export const Signup: React.FC = () => {
               <label className="text-xs font-semibold text-slate-300">Email Address</label>
               <Input
                 type="email"
-                placeholder="het.beladiya@example.com"
+                placeholder="name@example.com"
                 error={errors.email?.message}
                 {...register('email')}
                 className="bg-slate-950/60 border-slate-700 text-white placeholder:text-slate-500"

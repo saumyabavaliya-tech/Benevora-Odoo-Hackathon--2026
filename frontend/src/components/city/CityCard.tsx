@@ -22,23 +22,23 @@ export const CityCard: React.FC<CityCardProps> = ({
     <motion.div
       whileHover={{ y: -4 }}
       transition={{ duration: 0.2 }}
-      className="group bg-white rounded-3xl border border-[#E2E8F0] shadow-xs hover:shadow-xl hover:shadow-slate-200/50 overflow-hidden flex flex-col transition-all"
+      className="group bg-slate-900/70 backdrop-blur-2xl rounded-3xl border border-white/15 shadow-xl hover:shadow-2xl hover:border-white/25 overflow-hidden flex flex-col transition-all text-white"
     >
-      <div className="relative h-48 sm:h-52 w-full overflow-hidden bg-slate-100">
+      <div className="relative h-48 sm:h-52 w-full overflow-hidden bg-slate-950">
         <SafeImage
           src={city.imageUrl}
           alt={city.name}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           fallbackSrc={DEFAULT_FALLBACK_IMAGE}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/25 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/30 to-transparent pointer-events-none" />
 
         {/* Top Badges */}
         <div className="absolute top-3.5 left-3.5 right-3.5 flex items-center justify-between">
-          <Badge variant="primary" size="sm" className="bg-white/95 text-[#0F172A] font-bold border-none backdrop-blur-xs text-[10px] uppercase tracking-wider shadow-xs">
+          <Badge variant="primary" size="sm" className="bg-white/20 text-white font-bold border border-white/20 backdrop-blur-md text-[10px] uppercase tracking-wider shadow-md">
             {city.costIndex}
           </Badge>
-          <div className="flex items-center gap-1 bg-slate-900/80 text-amber-300 text-xs px-2.5 py-1 rounded-full backdrop-blur-xs font-bold border border-slate-700/60">
+          <div className="flex items-center gap-1 bg-slate-900/80 text-amber-300 text-xs px-2.5 py-1 rounded-full backdrop-blur-md font-bold border border-white/15 shadow-md">
             <TrendingUp className="w-3 h-3 text-amber-400" />
             <span>{city.popularityScore}/100</span>
           </div>
@@ -46,8 +46,8 @@ export const CityCard: React.FC<CityCardProps> = ({
 
         {/* City Title */}
         <div className="absolute bottom-3.5 left-3.5 right-3.5 text-white">
-          <div className="flex items-center gap-1 text-xs text-blue-200 font-semibold mb-0.5">
-            <MapPin className="w-3.5 h-3.5 shrink-0 text-[#2563EB]" />
+          <div className="flex items-center gap-1 text-xs text-blue-300 font-semibold mb-0.5">
+            <MapPin className="w-3.5 h-3.5 shrink-0 text-blue-400" />
             <span>{city.country} • {city.region}</span>
           </div>
           <h3 className="text-xl font-extrabold tracking-tight text-white">{city.name}</h3>
@@ -55,16 +55,16 @@ export const CityCard: React.FC<CityCardProps> = ({
       </div>
 
       <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between gap-3">
-        <p className="text-xs text-[#64748B] line-clamp-2 leading-relaxed font-medium">
+        <p className="text-xs text-slate-300 line-clamp-2 leading-relaxed font-medium">
           {city.description}
         </p>
 
         {/* Highlights */}
-        <div className="space-y-1.5 pt-2 border-t border-[#E2E8F0]">
-          <span className="text-[10px] font-bold text-[#64748B] uppercase tracking-wider">Top Highlights</span>
+        <div className="space-y-1.5 pt-2 border-t border-white/10">
+          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Top Highlights</span>
           <div className="flex flex-wrap gap-1">
             {city.highlights.slice(0, 2).map((h, i) => (
-              <span key={i} className="text-[10px] bg-[#F8FAFC] border border-[#E2E8F0] text-[#0F172A] px-2 py-0.5 rounded-md font-semibold">
+              <span key={i} className="text-[10px] bg-white/10 border border-white/15 text-slate-200 px-2 py-0.5 rounded-md font-semibold backdrop-blur-md">
                 {h}
               </span>
             ))}
@@ -72,8 +72,8 @@ export const CityCard: React.FC<CityCardProps> = ({
         </div>
 
         {/* Pricing & Best Season */}
-        <div className="flex items-center justify-between text-xs pt-2 text-[#64748B]">
-          <span className="font-medium">Avg. <strong className="text-[#0F172A]">{formatCurrency(city.averageDailyCost, city.currency)}</strong> / day</span>
+        <div className="flex items-center justify-between text-xs pt-2 text-slate-300">
+          <span className="font-medium">Avg. <strong className="text-white">{formatCurrency(city.averageDailyCost, city.currency)}</strong> / day</span>
           <span className="text-slate-400 font-medium">Best: {city.bestTimeToVisit}</span>
         </div>
 
@@ -84,7 +84,7 @@ export const CityCard: React.FC<CityCardProps> = ({
               onClick={() => onAddToTrip(city)}
               variant="primary"
               size="sm"
-              className="flex-1 bg-[#2563EB] hover:bg-[#1D4ED8] text-white rounded-xl font-bold"
+              className="flex-1 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold border border-blue-400/30 shadow-md backdrop-blur-md"
               leftIcon={<Plus className="w-4 h-4" />}
             >
               Add to Trip
@@ -95,8 +95,8 @@ export const CityCard: React.FC<CityCardProps> = ({
               onClick={() => onViewDetails(city)}
               variant="outline"
               size="sm"
-              className="rounded-xl border-[#E2E8F0] text-[#0F172A] hover:bg-slate-50 font-bold"
-              leftIcon={<Eye className="w-4 h-4 text-[#64748B]" />}
+              className="rounded-xl border-white/20 text-white hover:bg-white/10 font-bold backdrop-blur-md"
+              leftIcon={<Eye className="w-4 h-4 text-slate-300" />}
             >
               Details
             </Button>

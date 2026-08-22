@@ -128,7 +128,7 @@ export const MemoryUpload: React.FC<MemoryUploadProps> = ({
           className={`relative border-2 border-dashed rounded-2xl p-6 text-center cursor-pointer transition-all flex flex-col items-center justify-center min-h-48 ${
             selectedImage
               ? 'border-blue-500 bg-slate-900 overflow-hidden'
-              : 'border-slate-300 hover:border-blue-400 bg-slate-50 hover:bg-blue-50/30'
+              : 'border-white/20 hover:border-blue-400 bg-slate-900/60 hover:bg-slate-900/80 backdrop-blur-md'
           }`}
         >
           <input
@@ -160,13 +160,13 @@ export const MemoryUpload: React.FC<MemoryUploadProps> = ({
             </div>
           ) : (
             <div className="flex flex-col items-center gap-2">
-              <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-2xl bg-blue-500/20 text-blue-300 border border-blue-400/30 flex items-center justify-center">
                 <UploadCloud className="w-6 h-6" />
               </div>
-              <p className="text-sm font-bold text-slate-800">
+              <p className="text-sm font-bold text-white">
                 Click or drag & drop travel photograph
               </p>
-              <p className="text-xs text-slate-400">PNG, JPG, WebP up to 10MB</p>
+              <p className="text-xs text-slate-300">PNG, JPG, WebP up to 10MB</p>
             </div>
           )}
         </div>
@@ -174,11 +174,11 @@ export const MemoryUpload: React.FC<MemoryUploadProps> = ({
         {/* Upload Progress Simulation */}
         {isUploading && (
           <div className="space-y-1">
-            <div className="flex justify-between text-xs text-slate-600 font-semibold">
+            <div className="flex justify-between text-xs text-slate-300 font-semibold">
               <span>Uploading image...</span>
               <span>{uploadProgress}%</span>
             </div>
-            <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+            <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
               <div
                 className="bg-blue-600 h-full transition-all duration-200"
                 style={{ width: `${uploadProgress}%` }}
@@ -196,15 +196,15 @@ export const MemoryUpload: React.FC<MemoryUploadProps> = ({
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="text-sm font-medium text-slate-700 block mb-1.5">
+            <label className="text-sm font-semibold text-slate-200 block mb-1.5">
               Associated Trip
             </label>
             <select
-              className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+              className="w-full rounded-xl border border-white/15 bg-slate-900/80 text-white px-3.5 py-2.5 text-sm focus:border-blue-400 focus:outline-none"
               {...register('tripId')}
             >
               {trips.map((t) => (
-                <option key={t.id} value={t.id}>
+                <option key={t.id} value={t.id} className="bg-slate-900 text-white">
                   {t.name}
                 </option>
               ))}

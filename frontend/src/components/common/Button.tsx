@@ -33,17 +33,17 @@ export const Button: React.FC<ButtonProps> = ({
 
   const variantStyles = {
     primary:
-      'bg-blue-600 hover:bg-blue-700 text-white shadow-sm hover:shadow-blue-500/20 active:scale-[0.98] focus:ring-blue-500',
+      'bg-blue-600 hover:bg-blue-500 text-white shadow-md shadow-blue-600/30 border border-blue-400/30 active:scale-[0.98] focus:ring-blue-500',
     secondary:
-      'bg-slate-100 hover:bg-slate-200 text-slate-800 active:scale-[0.98] focus:ring-slate-400',
+      'bg-white/15 hover:bg-white/25 text-white border border-white/10 active:scale-[0.98] focus:ring-slate-400 backdrop-blur-md',
     outline:
-      'border border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50 text-slate-700 active:scale-[0.98] focus:ring-slate-300',
+      'border border-white/20 hover:border-white/40 bg-slate-900/60 hover:bg-white/10 text-white active:scale-[0.98] focus:ring-slate-300 backdrop-blur-md',
     ghost:
-      'text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 active:scale-[0.98] focus:ring-slate-300',
+      'text-slate-300 hover:text-white hover:bg-white/10 active:scale-[0.98] focus:ring-slate-300',
     danger:
-      'bg-rose-600 hover:bg-rose-700 text-white shadow-sm active:scale-[0.98] focus:ring-rose-500',
+      'bg-rose-600 hover:bg-rose-500 text-white shadow-md shadow-rose-600/30 border border-rose-400/30 active:scale-[0.98] focus:ring-rose-500',
     accent:
-      'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-md hover:shadow-blue-500/25 active:scale-[0.98] focus:ring-indigo-500',
+      'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-lg shadow-blue-500/25 border border-blue-400/30 active:scale-[0.98] focus:ring-indigo-500 backdrop-blur-md',
   };
 
   return (

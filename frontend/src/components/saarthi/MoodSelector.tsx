@@ -18,15 +18,15 @@ export const MOODS: { type: MoodType; label: string; icon: string }[] = [
 
 export const TypingIndicator: React.FC = () => {
   return (
-    <div className="flex items-center gap-3 p-4 bg-white rounded-2xl rounded-tl-sm border border-slate-100 shadow-xs max-w-xs">
-      <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shrink-0">
-        <Sparkles className="w-4 h-4 animate-spin" />
+    <div className="flex items-center gap-3 p-4 bg-slate-900/80 backdrop-blur-2xl rounded-2xl rounded-tl-sm border border-white/15 shadow-xl max-w-xs">
+      <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shrink-0 shadow-md shadow-blue-500/30">
+        <Sparkles className="w-4 h-4 animate-spin text-blue-300" />
       </div>
       <div className="flex items-center gap-1.5">
-        <span className="text-xs font-semibold text-slate-500 mr-1">Saarthi is thinking</span>
-        <span className="w-2 h-2 rounded-full bg-blue-600 animate-bounce" style={{ animationDelay: '0ms' }} />
-        <span className="w-2 h-2 rounded-full bg-blue-600 animate-bounce" style={{ animationDelay: '150ms' }} />
-        <span className="w-2 h-2 rounded-full bg-blue-600 animate-bounce" style={{ animationDelay: '300ms' }} />
+        <span className="text-xs font-semibold text-slate-300 mr-1">Saarthi is thinking</span>
+        <span className="w-2 h-2 rounded-full bg-blue-400 animate-bounce" style={{ animationDelay: '0ms' }} />
+        <span className="w-2 h-2 rounded-full bg-blue-400 animate-bounce" style={{ animationDelay: '150ms' }} />
+        <span className="w-2 h-2 rounded-full bg-blue-400 animate-bounce" style={{ animationDelay: '300ms' }} />
       </div>
     </div>
   );
@@ -38,7 +38,7 @@ export const MoodSelector: React.FC<{
 }> = ({ selectedMood, onSelectMood }) => {
   return (
     <div className="space-y-2">
-      <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block">
+      <label className="text-xs font-bold uppercase tracking-wider text-slate-300 block">
         Select Travel Mood
       </label>
       <div className="flex flex-wrap gap-2">
@@ -51,8 +51,8 @@ export const MoodSelector: React.FC<{
               onClick={() => onSelectMood(m.type)}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
                 isSelected
-                  ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/20 scale-105'
-                  : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-200/80 hover:border-blue-300'
+                  ? 'bg-blue-600 text-white shadow-md shadow-blue-600/40 border border-blue-400/40 scale-105'
+                  : 'bg-slate-900/80 text-slate-300 hover:bg-slate-800 hover:text-white border border-white/15'
               }`}
             >
               <span>{m.icon}</span>
@@ -81,7 +81,7 @@ export const QuickActions: React.FC<{
 
   return (
     <div className="space-y-2">
-      <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+      <span className="text-[11px] font-bold uppercase tracking-wider text-slate-300 block">
         Quick Prompts
       </span>
       <div className="flex flex-wrap gap-1.5">
@@ -90,7 +90,7 @@ export const QuickActions: React.FC<{
             key={i}
             type="button"
             onClick={() => onActionClick(act)}
-            className="px-3 py-1.5 bg-slate-100/80 hover:bg-blue-50 hover:text-blue-700 text-slate-700 rounded-xl text-xs font-semibold border border-transparent hover:border-blue-200 transition-all text-left"
+            className="px-3 py-1.5 bg-slate-900/80 hover:bg-blue-600/30 hover:text-blue-200 text-slate-300 rounded-xl text-xs font-semibold border border-white/10 hover:border-blue-400/30 transition-all text-left"
           >
             {act}
           </button>

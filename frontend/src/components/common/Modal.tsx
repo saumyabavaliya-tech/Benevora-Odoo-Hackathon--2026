@@ -67,21 +67,21 @@ export const Modal: React.FC<ModalProps> = ({
             exit={{ opacity: 0, scale: 0.96, y: 12 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
             className={cn(
-              'relative w-full bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden z-10 my-8',
+              'relative w-full bg-slate-900/95 backdrop-blur-2xl text-white rounded-3xl shadow-2xl border border-white/15 overflow-hidden z-10 my-8',
               maxWStyles[maxWidth]
             )}
           >
             {(title || showCloseButton) && (
-              <div className="flex items-start justify-between p-6 pb-4 border-b border-slate-100">
+              <div className="flex items-start justify-between p-6 pb-4 border-b border-white/10">
                 <div className="pr-6">
-                  {title && <h3 className="text-xl font-bold text-slate-900 tracking-tight">{title}</h3>}
-                  {description && <p className="text-sm text-slate-500 mt-1">{description}</p>}
+                  {title && <h3 className="text-xl font-extrabold text-white tracking-tight">{title}</h3>}
+                  {description && <p className="text-sm text-slate-300 mt-1">{description}</p>}
                 </div>
                 {showCloseButton && (
                   <button
                     type="button"
                     onClick={onClose}
-                    className="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+                    className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
                   >
                     <X className="w-5 h-5" />
                   </button>
@@ -89,7 +89,7 @@ export const Modal: React.FC<ModalProps> = ({
               </div>
             )}
 
-            <div className="p-6">{children}</div>
+            <div className="p-6 text-slate-100">{children}</div>
           </motion.div>
         </div>
       )}

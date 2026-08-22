@@ -1,5 +1,5 @@
 import React from 'react';
-import { Loader2, Compass } from 'lucide-react';
+import { BrandIcon } from './BrandLogo';
 import { cn } from '../../lib/utils';
 
 interface LoadingSpinnerProps {
@@ -13,18 +13,18 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   text,
   className,
 }) => {
-  const sizeMap = {
-    sm: 'w-4 h-4',
-    md: 'w-8 h-8',
-    lg: 'w-12 h-12',
+  const sizePxMap = {
+    sm: 28,
+    md: 44,
+    lg: 60,
   };
 
   return (
-    <div className={cn('flex flex-col items-center justify-center p-8 gap-3', className)}>
+    <div className={cn('flex flex-col items-center justify-center p-8 gap-3 select-none', className)}>
       <div className="relative flex items-center justify-center">
-        <Compass className={cn('animate-spin text-blue-600', sizeMap[size])} />
+        <BrandIcon sizePx={sizePxMap[size]} animate={true} />
       </div>
-      {text && <p className="text-sm font-medium text-slate-500 animate-pulse">{text}</p>}
+      {text && <p className="text-xs font-semibold tracking-wide text-slate-400 animate-pulse">{text}</p>}
     </div>
   );
 };

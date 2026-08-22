@@ -58,11 +58,14 @@ export interface TravelPreference {
 export interface Activity {
   id: string;
   name: string;
+  title?: string;
   description: string;
   cityId: string;
   cityName: string;
   durationHours: number;
+  duration?: number | string;
   estimatedCost: number;
+  cost?: number;
   currency: string;
   category: 'Sightseeing' | 'Adventure' | 'Food' | 'Culture' | 'Nature' | 'Shopping' | 'Nightlife' | 'Relaxation' | 'Photography';
   rating: number;
@@ -83,7 +86,7 @@ export interface City {
   description: string;
   costIndex: 'Budget' | 'Moderate' | 'Expensive' | 'Luxury';
   popularityScore: number; // 1-100
-  climate: 'Tropical' | 'Temperate' | 'Arid' | 'Continental' | 'Mediterranean' | 'Monsoon';
+  climate: 'Tropical' | 'Temperate' | 'Arid' | 'Continental' | 'Mediterranean' | 'Monsoon' | 'Alpine' | 'Subtropical';
   bestTimeToVisit: string;
   imageUrl: string;
   galleryImages: string[];

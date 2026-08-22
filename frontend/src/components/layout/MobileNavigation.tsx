@@ -13,7 +13,7 @@ export const MobileNavigation: React.FC = () => {
   ];
 
   return (
-    <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/80 px-2 py-1.5 shadow-lg">
+    <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-900/80 backdrop-blur-2xl border-t border-white/10 px-2 py-1.5 shadow-2xl">
       <div className="flex items-center justify-around">
         {items.map((item) => {
           const Icon = item.icon;
@@ -25,11 +25,11 @@ export const MobileNavigation: React.FC = () => {
                 cn(
                   'flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all',
                   item.isCenter &&
-                    'bg-blue-600 text-white rounded-full p-2.5 -mt-4 shadow-md shadow-blue-500/30 hover:bg-blue-700',
+                    'bg-blue-600/90 backdrop-blur-md text-white rounded-full p-2.5 -mt-4 shadow-xl shadow-blue-600/40 border border-blue-400/40 hover:bg-blue-500',
                   !item.isCenter &&
                     (isActive
-                      ? 'text-blue-600 font-bold'
-                      : 'text-slate-500 hover:text-slate-900')
+                      ? 'text-blue-400 font-bold'
+                      : 'text-slate-400 hover:text-white')
                 )
               }
             >

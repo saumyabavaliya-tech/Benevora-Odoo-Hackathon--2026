@@ -47,13 +47,13 @@ export const MyTrips: React.FC = () => {
         {/* Page Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <span className="text-xs font-bold uppercase tracking-wider text-blue-600">
+            <span className="text-xs font-bold uppercase tracking-wider text-blue-400">
               Trip Management
             </span>
-            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-1">
+            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight mt-1">
               My Planned Journeys
             </h1>
-            <p className="text-xs sm:text-sm text-slate-500 mt-1">
+            <p className="text-xs sm:text-sm text-slate-300 mt-1">
               View, edit, duplicate, and share your multi-city adventures.
             </p>
           </div>
@@ -62,7 +62,7 @@ export const MyTrips: React.FC = () => {
             <Button
               variant="primary"
               size="md"
-              className="bg-blue-600 hover:bg-blue-500 font-bold shadow-md shadow-blue-600/20"
+              className="bg-blue-600 hover:bg-blue-500 font-bold shadow-md shadow-blue-600/30"
               leftIcon={<PlusCircle className="w-4 h-4" />}
             >
               Create New Trip
@@ -71,7 +71,7 @@ export const MyTrips: React.FC = () => {
         </div>
 
         {/* Filter Controls & Search */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-white p-3 rounded-2xl border border-slate-200/80 shadow-xs">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-slate-900/70 backdrop-blur-2xl p-3 rounded-2xl border border-white/15 shadow-xl">
           {/* Tabs */}
           <div className="flex items-center gap-1 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0 scrollbar-none">
             {tabs.map((tab) => {
@@ -88,14 +88,14 @@ export const MyTrips: React.FC = () => {
                   onClick={() => setActiveTab(tab.value)}
                   className={`px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all flex items-center gap-1.5 ${
                     isSelected
-                      ? 'bg-slate-900 text-white shadow-2xs'
-                      : 'text-slate-600 hover:bg-slate-100'
+                      ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30'
+                      : 'text-slate-300 hover:bg-white/10 hover:text-white'
                   }`}
                 >
                   <span>{tab.label}</span>
                   <span
                     className={`text-[10px] px-1.5 py-0.2 rounded-full ${
-                      isSelected ? 'bg-slate-700 text-slate-200' : 'bg-slate-200 text-slate-600'
+                      isSelected ? 'bg-blue-800 text-white' : 'bg-slate-800 text-slate-300'
                     }`}
                   >
                     {count}
@@ -113,25 +113,25 @@ export const MyTrips: React.FC = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Filter by name or city..."
-              className="w-full pl-9 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+              className="w-full pl-9 pr-3 py-1.5 bg-slate-950/70 border border-white/15 rounded-xl text-xs text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-400"
             />
           </div>
         </div>
 
         {/* Trip Cards Grid */}
         {filteredTrips.length === 0 ? (
-          <div className="text-center py-16 bg-white rounded-3xl border border-slate-200 p-8 space-y-4">
-            <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto">
+          <div className="text-center py-16 bg-slate-900/70 backdrop-blur-2xl rounded-3xl border border-white/15 p-8 space-y-4 shadow-xl">
+            <div className="w-14 h-14 rounded-2xl bg-blue-500/20 text-blue-300 border border-blue-400/30 flex items-center justify-center mx-auto">
               <Compass className="w-7 h-7" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-slate-900">No journeys match this filter</h3>
-              <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
+              <h3 className="text-base font-bold text-white">No journeys match this filter</h3>
+              <p className="text-xs text-slate-300 mt-1 max-w-sm mx-auto">
                 Ready to explore? Create your first personalized itinerary with Travel Saarthi AI.
               </p>
             </div>
             <Link to="/trips/new">
-              <Button variant="primary" size="sm">
+              <Button variant="primary" size="sm" className="bg-blue-600 hover:bg-blue-500 font-bold">
                 Create a Journey
               </Button>
             </Link>
@@ -159,14 +159,14 @@ export const MyTrips: React.FC = () => {
             description="Anyone with this link can view this itinerary and clone it into their account."
           >
             <div className="space-y-4">
-              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100 space-y-2">
-                <span className="text-xs font-bold text-slate-500 uppercase">Shareable Link</span>
+              <div className="p-4 bg-slate-950/70 rounded-2xl border border-white/15 space-y-2">
+                <span className="text-xs font-bold text-slate-300 uppercase">Shareable Link</span>
                 <div className="flex items-center gap-2">
                   <input
                     type="text"
                     readOnly
                     value={`${window.location.origin}/shared/${sharingTrip.shareId || 'gt-share-123'}`}
-                    className="w-full text-xs bg-white border border-slate-200 rounded-xl px-3 py-2 text-slate-700 font-mono"
+                    className="w-full text-xs bg-slate-900 border border-white/15 rounded-xl px-3 py-2 text-slate-200 font-mono"
                   />
                   <Button
                     onClick={handleCopyShareLink}

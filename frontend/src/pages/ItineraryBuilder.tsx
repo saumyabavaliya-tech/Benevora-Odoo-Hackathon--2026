@@ -22,10 +22,7 @@ import {
   Clock,
   ArrowRight,
   PieChart,
-  Utensils,
-  Camera,
-  Car,
-  Hotel,
+  Building2,
 } from 'lucide-react';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
 import { PageContainer } from '../components/layout/PageContainer';
@@ -36,12 +33,13 @@ import { ItineraryCalendar } from '../components/itinerary/ItineraryCalendar';
 import { Button } from '../components/common/Button';
 import { Modal } from '../components/common/Modal';
 import { Input } from '../components/common/Input';
-import { ItineraryItem, ItineraryType } from '../types';
+import { ItineraryItem, ItineraryType, TripStop } from '../types';
+import { mockCities } from '../data/mockData';
 import { formatCurrency } from '../lib/utils';
 
 export const ItineraryBuilder: React.FC = () => {
   const { tripId } = useParams<{ tripId: string }>();
-  const { getTrip, updateTrip, addItineraryItem, deleteItineraryItem, updateItinerary } = useTrips();
+  const { getTrip, updateTrip } = useTrips();
   const trip = getTrip(tripId || '');
 
   const [viewMode, setViewMode] = useState<'days' | 'timeline' | 'calendar'>('days');
@@ -50,6 +48,11 @@ export const ItineraryBuilder: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDayNumber, setSelectedDayNumber] = useState<number>(1);
   const [editingItemId, setEditingItemId] = useState<string | null>(null);
+
+  // Add Stop Modal
+  const [isAddStopModalOpen, setIsAddStopModalOpen] = useState(false);
+  const [selectedCityId, setSelectedCityId] = useState(mockCities[0]?.id || '');
+  const [stopDaysCount, setStopDaysCount] = useState<number>(2);
 
   // Form State
   const [title, setTitle] = useState('');
@@ -83,7 +86,7 @@ export const ItineraryBuilder: React.FC = () => {
   }
 
   // Handle Drag & Drop reordering
-  const handleDragEnd = async (event: DragEndEvent) => {
+  const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
 
@@ -92,7 +95,7 @@ export const ItineraryBuilder: React.FC = () => {
 
     if (oldIndex !== -1 && newIndex !== -1) {
       const newItinerary = arrayMove(trip.itinerary, oldIndex, newIndex);
-      await updateItinerary(trip.id, newItinerary);
+      updateTrip(trip.id, { itinerary: newItinerary });
     }
   };
 
@@ -104,7 +107,7 @@ export const ItineraryBuilder: React.FC = () => {
     setTime('10:00 AM');
     setLocationName('');
     const targetStop = trip.stops[Math.min(dayNum - 1, trip.stops.length - 1)];
-    setCityName(targetStop?.cityName || trip.destinations[0] || 'Destination');
+    setCityName(targetStop?.cityName || trip.destinations[0] || 'Goa');
     setEstimatedCost(500);
     setNotes('');
     setIsModalOpen(true);
@@ -123,62 +126,93 @@ export const ItineraryBuilder: React.FC = () => {
     setIsModalOpen(true);
   };
 
-  const handleSaveActivity = async (e: React.FormEvent) => {
+  const handleSaveActivity = (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim()) return;
 
-    const startDateObj = new Date(trip.startDate);
-    const dayOffsetMs = (selectedDayNumber - 1) * 24 * 60 * 60 * 1000;
-    const computedDate = new Date(startDateObj.getTime() + dayOffsetMs).toISOString().split('T')[0];
-
     if (editingItemId) {
-      const updatedList = trip.itinerary.map((item) =>
+      // Update
+      const updated = trip.itinerary.map((item) =>
         item.id === editingItemId
           ? {
               ...item,
               title,
               type,
               time,
-              date: computedDate,
-              dayNumber: selectedDayNumber,
               locationName: locationName || cityName,
-              cityName: cityName || trip.destinations[0] || 'Destination',
-              estimatedCost: Number(estimatedCost) || 0,
+              cityName,
+              estimatedCost,
               notes,
             }
           : item
       );
-      await updateItinerary(trip.id, updatedList);
+      updateTrip(trip.id, { itinerary: updated });
     } else {
-      const newItem: Omit<ItineraryItem, 'id'> & { id?: string } = {
+      // Create new
+      const newItem: ItineraryItem = {
         id: `it-${Date.now()}`,
         dayNumber: selectedDayNumber,
-        date: computedDate,
+        date: trip.startDate,
         time,
         title,
         type,
         locationName: locationName || cityName,
-        cityName: cityName || trip.destinations[0] || 'Destination',
-        estimatedCost: Number(estimatedCost) || 0,
+        cityName,
+        estimatedCost,
         currency: trip.currency,
         completed: false,
         notes,
       };
-      await addItineraryItem(trip.id, newItem);
+      updateTrip(trip.id, { itinerary: [...trip.itinerary, newItem] });
     }
 
     setIsModalOpen(false);
   };
 
-  const handleDeleteItem = async (id: string) => {
-    await deleteItineraryItem(trip.id, id);
+  const handleDeleteItem = (id: string) => {
+    const updated = trip.itinerary.filter((item) => item.id !== id);
+    updateTrip(trip.id, { itinerary: updated });
   };
 
-  const handleToggleComplete = async (id: string) => {
+  const handleToggleComplete = (id: string) => {
     const updated = trip.itinerary.map((item) =>
       item.id === id ? { ...item, completed: !item.completed } : item
     );
-    await updateItinerary(trip.id, updated);
+    updateTrip(trip.id, { itinerary: updated });
+  };
+
+  const handleAddStop = (e: React.FormEvent) => {
+    e.preventDefault();
+    const city = mockCities.find((c) => c.id === selectedCityId) || mockCities[0];
+    if (!city) return;
+
+    const newStop: TripStop = {
+      id: `stop-${Date.now()}`,
+      cityId: city.id,
+      cityName: city.name,
+      country: city.country,
+      arrivalDate: trip.startDate,
+      departureDate: trip.endDate,
+      daysCount: Number(stopDaysCount) || 2,
+      order: trip.stops.length + 1,
+      lat: city.lat,
+      lng: city.lng,
+      coverImage: city.imageUrl,
+    };
+
+    const updatedDestinations = trip.destinations.includes(city.name)
+      ? trip.destinations
+      : [...trip.destinations, city.name];
+
+    const updatedTotalDays = trip.totalDays + (Number(stopDaysCount) || 1);
+
+    updateTrip(trip.id, {
+      stops: [...trip.stops, newStop],
+      destinations: updatedDestinations,
+      totalDays: updatedTotalDays,
+    });
+
+    setIsAddStopModalOpen(false);
   };
 
   return (
@@ -187,31 +221,31 @@ export const ItineraryBuilder: React.FC = () => {
         {/* Top Header & View Switcher */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2 text-xs font-bold text-blue-600">
+            <div className="flex items-center gap-2 text-xs font-bold text-blue-400">
               <Link to={`/trips/${trip.id}`} className="hover:underline">
                 {trip.name}
               </Link>
               <span>/</span>
               <span>Itinerary Builder</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-1">
+            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight mt-1">
               Interactive Itinerary Builder
             </h1>
-            <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-              Drag & drop activities, meals, transport, and schedule your stops across {trip.totalDays} days.
+            <p className="text-xs sm:text-sm text-slate-300 mt-0.5">
+              Drag & drop activities, fine-tune timing, and schedule your stops across {trip.totalDays} days.
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             {/* View Mode Toggle */}
-            <div className="flex items-center bg-white p-1 rounded-2xl border border-slate-200 shadow-2xs">
+            <div className="flex items-center bg-slate-900/80 p-1 rounded-2xl border border-white/15 shadow-md">
               <button
                 type="button"
                 onClick={() => setViewMode('days')}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                   viewMode === 'days'
-                    ? 'bg-slate-900 text-white shadow-2xs'
-                    : 'text-slate-600 hover:bg-slate-100'
+                    ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30'
+                    : 'text-slate-300 hover:bg-white/10 hover:text-white'
                 }`}
               >
                 <ListTodo className="w-3.5 h-3.5" />
@@ -222,8 +256,8 @@ export const ItineraryBuilder: React.FC = () => {
                 onClick={() => setViewMode('timeline')}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                   viewMode === 'timeline'
-                    ? 'bg-slate-900 text-white shadow-2xs'
-                    : 'text-slate-600 hover:bg-slate-100'
+                    ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30'
+                    : 'text-slate-300 hover:bg-white/10 hover:text-white'
                 }`}
               >
                 <GitCommit className="w-3.5 h-3.5" />
@@ -234,8 +268,8 @@ export const ItineraryBuilder: React.FC = () => {
                 onClick={() => setViewMode('calendar')}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                   viewMode === 'calendar'
-                    ? 'bg-slate-900 text-white shadow-2xs'
-                    : 'text-slate-600 hover:bg-slate-100'
+                    ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30'
+                    : 'text-slate-300 hover:bg-white/10 hover:text-white'
                 }`}
               >
                 <CalendarIcon className="w-3.5 h-3.5" />
@@ -244,150 +278,194 @@ export const ItineraryBuilder: React.FC = () => {
             </div>
 
             <Button
+              onClick={() => setIsAddStopModalOpen(true)}
+              variant="outline"
+              size="sm"
+              leftIcon={<Building2 className="w-4 h-4 text-blue-400" />}
+            >
+              Add Stop
+            </Button>
+
+            <Button
+              onClick={() => handleOpenAddModal(1)}
               variant="primary"
               size="sm"
-              leftIcon={<Plus className="w-3.5 h-3.5" />}
-              onClick={() => handleOpenAddModal(1)}
+              leftIcon={<Plus className="w-4 h-4" />}
+              className="bg-blue-600 hover:bg-blue-500 font-bold"
             >
-              Add Item
+              Add Activity
             </Button>
           </div>
         </div>
 
-        {/* Dynamic View Modes */}
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragEnd={handleDragEnd}
-        >
-          {viewMode === 'days' && (
+        {/* View Layout 1: Day by Day with Dnd-Kit */}
+        {viewMode === 'days' && (
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+          >
             <div className="space-y-6">
               {Array.from({ length: trip.totalDays }).map((_, index) => {
                 const dayNum = index + 1;
-                const itemsForDay = trip.itinerary.filter((item) => item.dayNumber === dayNum);
-                const startDateObj = new Date(trip.startDate);
-                const dayDate = new Date(startDateObj.getTime() + index * 24 * 60 * 60 * 1000)
-                  .toISOString()
-                  .split('T')[0];
-
-                const targetStop = trip.stops[Math.min(index, trip.stops.length - 1)];
+                const dayItems = trip.itinerary.filter((i) => i.dayNumber === dayNum);
+                const assignedStop =
+                  trip.stops[Math.min(index, trip.stops.length - 1)] || trip.stops[0];
 
                 return (
                   <ItineraryDay
                     key={dayNum}
                     dayNumber={dayNum}
-                    date={dayDate}
-                    cityName={targetStop?.cityName || trip.destinations[0] || 'Destination'}
-                    items={itemsForDay}
+                    dateStr={trip.startDate}
+                    cityName={assignedStop?.cityName || trip.destinations[0] || 'Destination'}
+                    items={dayItems}
                     currency={trip.currency}
-                    onAddItem={() => handleOpenAddModal(dayNum)}
-                    onEditItem={handleOpenEditModal}
+                    onAddItem={handleOpenAddModal}
                     onDeleteItem={handleDeleteItem}
+                    onEditItem={handleOpenEditModal}
                     onToggleComplete={handleToggleComplete}
                   />
                 );
               })}
             </div>
-          )}
+          </DndContext>
+        )}
 
-          {viewMode === 'timeline' && (
-            <ItineraryTimeline
-              trip={trip}
-              onEditItem={handleOpenEditModal}
-              onDeleteItem={handleDeleteItem}
-              onToggleComplete={handleToggleComplete}
-            />
-          )}
+        {/* View Layout 2: Vertical Visual Timeline */}
+        {viewMode === 'timeline' && (
+          <div className="bg-slate-900/70 backdrop-blur-2xl p-6 sm:p-8 rounded-3xl border border-white/15 shadow-xl">
+            <ItineraryTimeline items={trip.itinerary} currency={trip.currency} />
+          </div>
+        )}
 
-          {viewMode === 'calendar' && (
-            <ItineraryCalendar
-              trip={trip}
-              onAddItem={handleOpenAddModal}
-              onEditItem={handleOpenEditModal}
-            />
-          )}
-        </DndContext>
+        {/* View Layout 3: Calendar View */}
+        {viewMode === 'calendar' && (
+          <ItineraryCalendar
+            items={trip.itinerary}
+            startDateStr={trip.startDate}
+            currency={trip.currency}
+          />
+        )}
 
-        {/* Add / Edit Activity & Meal Modal */}
+        {/* Add Stop Modal */}
         <Modal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          title={editingItemId ? 'Edit Itinerary Item' : `Add Item to Day ${selectedDayNumber}`}
-          description="Schedule activities, meals, tours, or transport."
+          isOpen={isAddStopModalOpen}
+          onClose={() => setIsAddStopModalOpen(false)}
+          title="Add Destination Stop"
+          description="Include another city or stop in your travel route."
         >
-          <form onSubmit={handleSaveActivity} className="space-y-4">
-            <div className="space-y-1">
-              <label className="text-xs font-semibold text-slate-700">Item Title / Name</label>
-              <Input
-                placeholder="e.g. Seafood Dinner at Fisherman's Wharf or Adalaj Stepwell"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                required
+          <form onSubmit={handleAddStop} className="space-y-4">
+            <div>
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-300 block mb-1.5">
+                Select Destination
+              </label>
+              <select
+                value={selectedCityId}
+                onChange={(e) => setSelectedCityId(e.target.value)}
+                className="w-full rounded-xl border border-white/15 bg-slate-950 px-3.5 py-2.5 text-xs text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                {mockCities.map((city) => (
+                  <option key={city.id} value={city.id}>
+                    {city.name}, {city.country} ({city.region})
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-300 block mb-1.5">
+                Days to spend at this stop
+              </label>
+              <input
+                type="number"
+                min="1"
+                max="14"
+                value={stopDaysCount}
+                onChange={(e) => setStopDaysCount(Number(e.target.value))}
+                className="w-full rounded-xl border border-white/15 bg-slate-950 px-3.5 py-2 text-xs text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
 
+            <div className="flex justify-end gap-2 pt-3 border-t border-white/10">
+              <Button type="button" variant="ghost" onClick={() => setIsAddStopModalOpen(false)}>
+                Cancel
+              </Button>
+              <Button type="submit" variant="primary">
+                Add Stop to Itinerary
+              </Button>
+            </div>
+          </form>
+        </Modal>
+
+        {/* Add/Edit Activity Modal */}
+        <Modal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          title={editingItemId ? 'Edit Activity' : `Add Activity to Day ${selectedDayNumber}`}
+          description="Schedule a stop, meal, tour, or transit in your trip."
+        >
+          <form onSubmit={handleSaveActivity} className="space-y-4">
+            <Input
+              label="Activity Title"
+              placeholder="e.g. Scuba Diving at Grand Island, Sunset Dinner"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+            />
+
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-xs font-semibold text-slate-700 block mb-1">Type / Category</label>
+                <label className="text-sm font-medium text-slate-700 block mb-1.5">Type</label>
                 <select
                   value={type}
                   onChange={(e) => setType(e.target.value as ItineraryType)}
                   className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-900 focus:border-blue-500 focus:outline-none"
                 >
-                  <option value="activity">🎯 Activity / Sightseeing</option>
-                  <option value="meal">🍽️ Dining / Meal</option>
-                  <option value="travel">🚆 Travel / Transit</option>
-                  <option value="accommodation">🏨 Hotel / Stay</option>
-                  <option value="leisure">☕ Leisure / Free time</option>
+                  <option value="activity">Activity / Tour</option>
+                  <option value="meal">Dining / Meal</option>
+                  <option value="travel">Travel / Transit</option>
+                  <option value="accommodation">Hotel / Stay</option>
+                  <option value="leisure">Leisure / Free time</option>
                 </select>
               </div>
 
-              <div>
-                <label className="text-xs font-semibold text-slate-700 block mb-1">Time</label>
-                <Input
-                  placeholder="e.g. 10:00 AM or 13:30"
-                  value={time}
-                  onChange={(e) => setTime(e.target.value)}
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="text-xs font-semibold text-slate-700 block mb-1">Location / Venue</label>
-                <Input
-                  placeholder="e.g. Fisherman's Wharf, Candolim"
-                  value={locationName}
-                  onChange={(e) => setLocationName(e.target.value)}
-                />
-              </div>
-              <div>
-                <label className="text-xs font-semibold text-slate-700 block mb-1">City</label>
-                <Input
-                  placeholder="e.g. Goa"
-                  value={cityName}
-                  onChange={(e) => setCityName(e.target.value)}
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="text-xs font-semibold text-slate-700 block mb-1">Estimated Cost ({trip.currency})</label>
               <Input
-                type="number"
-                min="0"
-                value={estimatedCost}
-                onChange={(e) => setEstimatedCost(Number(e.target.value))}
+                label="Time"
+                placeholder="10:00 AM"
+                value={time}
+                onChange={(e) => setTime(e.target.value)}
               />
             </div>
 
+            <div className="grid grid-cols-2 gap-3">
+              <Input
+                label="Location / Place"
+                placeholder="e.g. Mandovi River Pier"
+                value={locationName}
+                onChange={(e) => setLocationName(e.target.value)}
+              />
+              <Input
+                label="City"
+                placeholder="e.g. Goa"
+                value={cityName}
+                onChange={(e) => setCityName(e.target.value)}
+              />
+            </div>
+
+            <Input
+              label={`Estimated Cost (${trip.currency})`}
+              type="number"
+              value={estimatedCost}
+              onChange={(e) => setEstimatedCost(Number(e.target.value))}
+            />
+
             <div>
-              <label className="text-xs font-semibold text-slate-700 block mb-1">Notes & Tips</label>
+              <label className="text-sm font-medium text-slate-700 block mb-1.5">Notes</label>
               <textarea
                 rows={2}
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                placeholder="e.g. Famous for prawn balchao, sunset views"
+                placeholder="e.g. Pre-booked via operator, bring swimwear"
                 className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs text-slate-900 focus:border-blue-500 focus:outline-none"
               />
             </div>
@@ -397,7 +475,7 @@ export const ItineraryBuilder: React.FC = () => {
                 Cancel
               </Button>
               <Button type="submit" variant="primary">
-                {editingItemId ? 'Update Item' : 'Add to Day'}
+                {editingItemId ? 'Update Activity' : 'Add to Day'}
               </Button>
             </div>
           </form>

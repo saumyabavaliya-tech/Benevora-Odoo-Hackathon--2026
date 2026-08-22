@@ -28,7 +28,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         autoFocus={autoFocus}
-        className="w-full pl-10 pr-9 py-2.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all shadow-sm"
+        className="w-full pl-10 pr-9 py-2.5 bg-slate-900/80 backdrop-blur-xl border border-white/15 rounded-2xl text-sm text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-400 transition-all shadow-lg"
       />
       {value && (
         <button
@@ -37,7 +37,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
             onChange('');
             onClear?.();
           }}
-          className="absolute right-3 p-0.5 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100 transition-colors"
+          className="absolute right-3 p-0.5 text-slate-400 hover:text-white rounded-full hover:bg-white/10 transition-colors"
         >
           <X className="w-4 h-4" />
         </button>

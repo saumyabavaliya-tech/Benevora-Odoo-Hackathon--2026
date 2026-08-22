@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
 import {
-  Compass,
   Sparkles,
   Bell,
   MapPin,
@@ -13,11 +12,13 @@ import {
   User as UserIcon,
   Settings,
   PlusCircle,
+  Shield,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { mockNotifications } from '../../data/mockData';
 import { Button } from '../common/Button';
 import { SafeImage } from '../ui/SafeImage';
+import { BrandLogo } from '../common/BrandLogo';
 
 export const Navbar: React.FC = () => {
   const { user, logout, isAuthenticated } = useAuth();
@@ -29,30 +30,20 @@ export const Navbar: React.FC = () => {
   const unreadCount = mockNotifications.filter((n) => !n.read).length;
 
   const navLinks = [
-    { to: '/', label: 'Home' },
-    { to: '/explore', label: 'Explore' },
+    { to: '/dashboard', label: 'Dashboard' },
     { to: '/trips', label: 'My Trips' },
+    { to: '/explore', label: 'Explore' },
     { to: '/map', label: 'Map' },
     { to: '/memories', label: 'Memories' },
   ];
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-white/90 backdrop-blur-md border-b border-slate-200/80 transition-all">
+    <header className="sticky top-0 z-40 w-full bg-slate-900/75 backdrop-blur-xl border-b border-white/10 text-white transition-all shadow-lg shadow-black/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Brand Logo */}
-          <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-xl bg-[#2563EB] flex items-center justify-center text-white shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform duration-200">
-              <Compass className="w-5 h-5 animate-[spin_12s_linear_infinite]" />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-xl font-bold tracking-tight text-[#0F172A] flex items-center">
-                GlobeTrotter
-              </span>
-              <span className="text-[10px] font-semibold tracking-wider uppercase text-[#64748B] -mt-1 hidden sm:block">
-                Feel the adventure
-              </span>
-            </div>
+          <Link to="/dashboard" className="flex items-center group">
+            <BrandLogo size="md" />
           </Link>
 
           {/* Desktop Navigation */}
@@ -64,8 +55,8 @@ export const Navbar: React.FC = () => {
                 className={({ isActive }) =>
                   `px-3.5 py-2 rounded-xl text-sm font-medium transition-all ${
                     isActive
-                      ? 'bg-[#2563EB] text-white font-semibold shadow-xs'
-                      : 'text-[#64748B] hover:text-[#0F172A] hover:bg-slate-100'
+                      ? 'bg-blue-600/80 backdrop-blur-md text-white font-semibold shadow-xs border border-blue-400/40'
+                      : 'text-slate-300 hover:text-white hover:bg-white/10'
                   }`
                 }
               >
@@ -82,7 +73,7 @@ export const Navbar: React.FC = () => {
                 variant="accent"
                 size="sm"
                 leftIcon={<Sparkles className="w-4 h-4 text-amber-300" />}
-                className="bg-gradient-to-r from-[#2563EB] to-[#1D4ED8] text-white font-bold shadow-md shadow-blue-600/20"
+                className="bg-gradient-to-r from-[#2563EB]/90 to-[#1D4ED8]/90 backdrop-blur-md border border-blue-400/30 text-white font-bold shadow-md shadow-blue-600/30 hover:brightness-110"
               >
                 <span className="hidden sm:inline">Ask </span>Saarthi AI
               </Button>
@@ -98,32 +89,32 @@ export const Navbar: React.FC = () => {
                       setShowNotifications(!showNotifications);
                       setShowProfileMenu(false);
                     }}
-                    className="p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 relative transition-colors"
+                    className="p-2 rounded-xl text-slate-300 hover:text-white hover:bg-white/10 relative transition-colors border border-transparent hover:border-white/10"
                     aria-label="Notifications"
                   >
                     <Bell className="w-5 h-5" />
                     {unreadCount > 0 && (
-                      <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-rose-500 rounded-full ring-2 ring-white" />
+                      <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-rose-500 rounded-full ring-2 ring-slate-900" />
                     )}
                   </button>
 
                   {/* Notification Dropdown */}
                   {showNotifications && (
-                    <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-2xl shadow-xl border border-slate-100 p-4 z-50 animate-in fade-in zoom-in-95 duration-150">
-                      <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                        <h4 className="font-bold text-slate-900 text-sm">Notifications</h4>
-                        <span className="text-xs bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full font-medium">
+                    <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-slate-900/90 backdrop-blur-2xl rounded-2xl shadow-2xl border border-white/15 p-4 z-50 animate-in fade-in zoom-in-95 duration-150">
+                      <div className="flex items-center justify-between pb-3 border-b border-white/10">
+                        <h4 className="font-bold text-white text-sm">Notifications</h4>
+                        <span className="text-xs bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded-full font-medium border border-blue-500/30">
                           {unreadCount} new
                         </span>
                       </div>
-                      <div className="divide-y divide-slate-100 max-h-72 overflow-y-auto mt-2">
+                      <div className="divide-y divide-white/5 max-h-72 overflow-y-auto mt-2">
                         {mockNotifications.map((n) => (
                           <div
                             key={n.id}
-                            className="py-2.5 px-2 hover:bg-slate-50 rounded-xl transition-colors cursor-pointer"
+                            className="py-2.5 px-2 hover:bg-white/5 rounded-xl transition-colors cursor-pointer"
                           >
-                            <p className="text-xs font-semibold text-slate-900">{n.title}</p>
-                            <p className="text-xs text-slate-500 mt-0.5">{n.message}</p>
+                            <p className="text-xs font-semibold text-white">{n.title}</p>
+                            <p className="text-xs text-slate-300 mt-0.5">{n.message}</p>
                             <span className="text-[10px] text-slate-400 mt-1 block">{n.time}</span>
                           </div>
                         ))}
@@ -140,45 +131,53 @@ export const Navbar: React.FC = () => {
                       setShowProfileMenu(!showProfileMenu);
                       setShowNotifications(false);
                     }}
-                    className="flex items-center gap-2 p-1 rounded-full hover:ring-2 hover:ring-blue-500/30 transition-all"
+                    className="flex items-center gap-2 p-1 rounded-full hover:ring-2 hover:ring-blue-400/50 transition-all"
                   >
                     <SafeImage
                       src={user?.avatar}
                       alt={user?.name || 'User'}
-                      className="w-8 h-8 rounded-full object-cover ring-2 ring-slate-100"
+                      className="w-8 h-8 rounded-full object-cover ring-2 ring-white/20"
                       fallbackSrc="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80"
                     />
                   </button>
 
                   {showProfileMenu && (
-                    <div className="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-slate-100 p-2 z-50">
-                      <div className="px-3 py-2 border-b border-slate-100 mb-1">
-                        <p className="text-sm font-bold text-slate-900 truncate">{user?.name}</p>
-                        <p className="text-xs text-slate-500 truncate">{user?.email}</p>
+                    <div className="absolute right-0 mt-2 w-56 bg-slate-900/90 backdrop-blur-2xl rounded-2xl shadow-2xl border border-white/15 p-2 z-50">
+                      <div className="px-3 py-2 border-b border-white/10 mb-1">
+                        <p className="text-sm font-bold text-white truncate">{user?.name}</p>
+                        <p className="text-xs text-slate-400 truncate">{user?.email}</p>
                       </div>
                       <Link
                         to="/dashboard"
                         onClick={() => setShowProfileMenu(false)}
-                        className="flex items-center gap-2 px-3 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 rounded-xl"
+                        className="flex items-center gap-2 px-3 py-2 text-xs font-medium text-slate-200 hover:bg-white/10 rounded-xl"
                       >
-                        <Layers className="w-4 h-4 text-slate-400" />
+                        <Layers className="w-4 h-4 text-blue-400" />
                         Dashboard
                       </Link>
                       <Link
                         to="/profile"
                         onClick={() => setShowProfileMenu(false)}
-                        className="flex items-center gap-2 px-3 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 rounded-xl"
+                        className="flex items-center gap-2 px-3 py-2 text-xs font-medium text-slate-200 hover:bg-white/10 rounded-xl"
                       >
-                        <UserIcon className="w-4 h-4 text-slate-400" />
+                        <UserIcon className="w-4 h-4 text-blue-400" />
                         My Profile
                       </Link>
                       <Link
                         to="/settings"
                         onClick={() => setShowProfileMenu(false)}
-                        className="flex items-center gap-2 px-3 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 rounded-xl"
+                        className="flex items-center gap-2 px-3 py-2 text-xs font-medium text-slate-200 hover:bg-white/10 rounded-xl"
                       >
-                        <Settings className="w-4 h-4 text-slate-400" />
+                        <Settings className="w-4 h-4 text-blue-400" />
                         Settings
+                      </Link>
+                      <Link
+                        to="/admin"
+                        onClick={() => setShowProfileMenu(false)}
+                        className="flex items-center gap-2 px-3 py-2 text-xs font-medium text-slate-200 hover:bg-white/10 rounded-xl"
+                      >
+                        <Shield className="w-4 h-4 text-blue-400" />
+                        Admin Analytics
                       </Link>
                       <button
                         type="button"
@@ -187,7 +186,7 @@ export const Navbar: React.FC = () => {
                           setShowProfileMenu(false);
                           navigate('/');
                         }}
-                        className="w-full flex items-center gap-2 px-3 py-2 text-xs font-medium text-rose-600 hover:bg-rose-50 rounded-xl mt-1"
+                        className="w-full flex items-center gap-2 px-3 py-2 text-xs font-medium text-rose-400 hover:bg-rose-500/20 rounded-xl mt-1"
                       >
                         <LogOut className="w-4 h-4" />
                         Sign out
@@ -199,12 +198,12 @@ export const Navbar: React.FC = () => {
             ) : (
               <div className="flex items-center gap-2">
                 <Link to="/login">
-                  <Button variant="ghost" size="sm">
+                  <Button variant="ghost" size="sm" className="text-slate-200 hover:text-white hover:bg-white/10">
                     Log in
                   </Button>
                 </Link>
                 <Link to="/signup">
-                  <Button variant="primary" size="sm">
+                  <Button variant="primary" size="sm" className="bg-blue-600/90 backdrop-blur-md border border-blue-400/30 text-white shadow-md shadow-blue-600/20">
                     Sign up
                   </Button>
                 </Link>
@@ -215,7 +214,7 @@ export const Navbar: React.FC = () => {
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-xl text-slate-600 hover:text-slate-900 md:hidden hover:bg-slate-100"
+              className="p-2 rounded-xl text-slate-300 hover:text-white md:hidden hover:bg-white/10"
               aria-label="Toggle navigation"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -226,7 +225,7 @@ export const Navbar: React.FC = () => {
 
       {/* Mobile Navigation Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-slate-100 bg-white px-4 pt-3 pb-6 space-y-2 shadow-lg animate-in slide-in-from-top duration-200">
+        <div className="md:hidden border-t border-white/10 bg-slate-900/95 backdrop-blur-2xl px-4 pt-3 pb-6 space-y-2 shadow-2xl animate-in slide-in-from-top duration-200">
           {navLinks.map((link) => (
             <NavLink
               key={link.to}
@@ -234,16 +233,16 @@ export const Navbar: React.FC = () => {
               onClick={() => setMobileMenuOpen(false)}
               className={({ isActive }) =>
                 `block px-3.5 py-2.5 rounded-xl text-sm font-medium ${
-                  isActive ? 'bg-blue-50 text-blue-700 font-bold' : 'text-slate-700 hover:bg-slate-50'
+                  isActive ? 'bg-blue-600/30 text-blue-300 font-bold border border-blue-500/30' : 'text-slate-300 hover:bg-white/10'
                 }`
               }
             >
               {link.label}
             </NavLink>
           ))}
-          <div className="pt-3 border-t border-slate-100 flex flex-col gap-2">
+          <div className="pt-3 border-t border-white/10 flex flex-col gap-2">
             <Link to="/trips/new" onClick={() => setMobileMenuOpen(false)}>
-              <Button variant="primary" size="md" className="w-full" leftIcon={<PlusCircle className="w-4 h-4" />}>
+              <Button variant="primary" size="md" className="w-full bg-blue-600/90 backdrop-blur-md border border-blue-400/30 shadow-lg" leftIcon={<PlusCircle className="w-4 h-4" />}>
                 Plan New Trip
               </Button>
             </Link>

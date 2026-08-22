@@ -80,10 +80,10 @@ export const BudgetChart: React.FC<BudgetChartProps> = ({
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       {/* Category Donut Breakdown */}
-      <div className="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
+      <div className="bg-slate-900/70 backdrop-blur-2xl p-5 sm:p-6 rounded-3xl border border-white/15 shadow-xl flex flex-col justify-between">
         <div>
-          <h3 className="text-base font-extrabold text-slate-900">Expenses by Category</h3>
-          <p className="text-xs text-slate-500 mt-0.5">Where your travel funds are going</p>
+          <h3 className="text-base font-extrabold text-white">Expenses by Category</h3>
+          <p className="text-xs text-slate-300 mt-0.5">Where your travel funds are going</p>
         </div>
 
         <div className="h-64 my-4 relative flex items-center justify-center">
@@ -108,8 +108,8 @@ export const BudgetChart: React.FC<BudgetChartProps> = ({
                 </PieChart>
               </ResponsiveContainer>
               <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                <span className="text-xs text-slate-400 font-semibold uppercase">Total Spent</span>
-                <span className="text-base sm:text-lg font-black text-slate-900">
+                <span className="text-xs text-slate-300 font-semibold uppercase">Total Spent</span>
+                <span className="text-base sm:text-lg font-black text-white">
                   {formatCurrency(totalSpent, currency)}
                 </span>
               </div>
@@ -120,32 +120,32 @@ export const BudgetChart: React.FC<BudgetChartProps> = ({
         </div>
 
         {/* Category Legend */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-3 border-t border-slate-100">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-3 border-t border-white/10">
           {pieData.map((item) => (
             <div key={item.name} className="flex items-center gap-2 text-xs">
               <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: item.color }} />
-              <span className="text-slate-600 truncate">{item.name}</span>
+              <span className="text-slate-200 truncate">{item.name}</span>
             </div>
           ))}
         </div>
       </div>
 
       {/* Daily Spending Trend */}
-      <div className="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
+      <div className="bg-slate-900/70 backdrop-blur-2xl p-5 sm:p-6 rounded-3xl border border-white/15 shadow-xl flex flex-col justify-between">
         <div>
-          <h3 className="text-base font-extrabold text-slate-900">Daily Spending Flow</h3>
-          <p className="text-xs text-slate-500 mt-0.5">Expenses across trip timeline</p>
+          <h3 className="text-base font-extrabold text-white">Daily Spending Flow</h3>
+          <p className="text-xs text-slate-300 mt-0.5">Expenses across trip timeline</p>
         </div>
 
         <div className="h-64 my-4">
           {barData.length > 0 ? (
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={barData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F1F5F9" />
-                <XAxis dataKey="date" tick={{ fontSize: 11, fill: '#94A3B8' }} />
-                <YAxis tick={{ fontSize: 11, fill: '#94A3B8' }} />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.1)" />
+                <XAxis dataKey="date" tick={{ fontSize: 11, fill: '#CBD5E1' }} />
+                <YAxis tick={{ fontSize: 11, fill: '#CBD5E1' }} />
                 <Tooltip content={<CustomTooltip />} />
-                <Bar dataKey="amount" fill="#2563EB" radius={[8, 8, 0, 0]} />
+                <Bar dataKey="amount" fill="#3B82F6" radius={[8, 8, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           ) : (
@@ -155,9 +155,9 @@ export const BudgetChart: React.FC<BudgetChartProps> = ({
           )}
         </div>
 
-        <div className="flex items-center justify-between text-xs text-slate-500 pt-3 border-t border-slate-100">
+        <div className="flex items-center justify-between text-xs text-slate-300 pt-3 border-t border-white/10">
           <span>Target Budget: {formatCurrency(totalBudget, currency)}</span>
-          <span className={totalSpent > totalBudget ? 'text-rose-600 font-bold' : 'text-emerald-600 font-bold'}>
+          <span className={totalSpent > totalBudget ? 'text-rose-400 font-bold' : 'text-emerald-400 font-bold'}>
             {totalSpent > totalBudget ? 'Over Budget' : 'Within Budget'}
           </span>
         </div>

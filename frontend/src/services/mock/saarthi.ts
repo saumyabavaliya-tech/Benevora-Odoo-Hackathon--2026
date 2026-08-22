@@ -2,11 +2,83 @@ import { ChatMessage, MoodType, Trip, ItineraryItem } from '../../types';
 import { mockCities, mockActivities } from '../../data/mockData';
 import { delay } from '../../lib/utils';
 
+export interface SaarthiChatOptions {
+  mood?: MoodType;
+  tripContext?: Partial<Trip>;
+  conversationHistory?: Array<{ role: 'user' | 'model'; content: string }>;
+  modelName?: string;
+}
+
 export const saarthiService = {
   async sendMessage(
     userMessage: string,
-    options?: { mood?: MoodType; tripContext?: Partial<Trip> }
+    options?: SaarthiChatOptions
   ): Promise<ChatMessage> {
+    const modelName = options?.modelName || 'gemini-3.5-flash';
+
+    // Prepare full multi-turn history including the latest message
+    const history = options?.conversationHistory ? [...options.conversationHistory] : [];
+    history.push({ role: 'user', content: userMessage });
+
+    try {
+      const res = await fetch('/api/saarthi/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: history,
+          mood: options?.mood,
+          tripContext: options?.tripContext,
+          modelName: modelName,
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        const content = data.content || '';
+        const suggestedActions = data.suggestedActions || [];
+
+        // Check if message recommends specific demo cities/activities
+        let recommendations: ChatMessage['recommendations'] = undefined;
+        const lower = userMessage.toLowerCase();
+        if (lower.includes('ahmedabad') || lower.includes('5 day') || lower.includes('west coast')) {
+          recommendations = {
+            cities: mockCities.filter((c) => ['Ahmedabad', 'Mumbai', 'Goa'].includes(c.name)),
+            tripPlanSummary: {
+              title: '5-Day Coastal Odyssey',
+              route: ['Ahmedabad', 'Mumbai', 'Goa'],
+              duration: '5 Days / 4 Nights',
+              estimatedBudget: '₹28,500',
+              highlights: ['Vande Bharat Rail', 'Adalaj Stepwell', 'Marine Drive Sunset', 'Catamaran Cruise'],
+            },
+          };
+        } else if (lower.includes('adventure')) {
+          recommendations = {
+            activities: mockActivities.filter((a) => a.category === 'Adventure' || a.category === 'Nature'),
+          };
+        } else if (lower.includes('food') || lower.includes('eat')) {
+          recommendations = {
+            activities: mockActivities.filter((a) => a.category === 'Food'),
+          };
+        }
+
+        return {
+          id: `msg-${Date.now()}`,
+          sender: 'saarthi',
+          content: content,
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          suggestedActions: suggestedActions.length > 0 ? suggestedActions : [
+            'Plan a 5-day route',
+            'Find local food spots',
+            'Optimize my trip budget',
+          ],
+          recommendations,
+        };
+      }
+    } catch (error) {
+      console.warn('Backend Gemini API endpoint unreachable, using client-side fallback:', error);
+    }
+
+    // Client fallback if server is starting or network failure
     return this.generateResponse(userMessage, options?.mood, options?.tripContext);
   },
 
@@ -15,11 +87,10 @@ export const saarthiService = {
     currentMood?: MoodType,
     tripContext?: Partial<Trip>
   ): Promise<ChatMessage> {
-    await delay(700); // Simulate AI generation delay
+    await delay(700); // Simulate response delay
 
     const lower = userMessage.toLowerCase();
 
-    // 1. Specific demo prompts
     if (lower.includes('ahmedabad') || lower.includes('5 day') || lower.includes('5-day') || lower.includes('west coast')) {
       return {
         id: `msg-${Date.now()}`,
@@ -92,63 +163,21 @@ I've added these thrill-seekers highlights to your recommended cards!`,
       };
     }
 
-    if (lower.includes('romantic') || currentMood === 'Romantic') {
-      return {
-        id: `msg-${Date.now()}`,
-        sender: 'saarthi',
-        content: `❤️ **Curated Romantic Escapes**:
-
-- Private sunset sailing charter over Mandovi Bay with sparkling cider and acoustic music.
-- Candlelit rooftop dinner overlooking the illuminated Queen’s Necklace in South Mumbai.
-- Early morning private shikara boat on Lake Pichola in Udaipur with heritage palace views.
-
-Shall we weave these into golden-hour slots in your schedule?`,
-        timestamp: 'Just now',
-        suggestedActions: [
-          'Add sunset sailing to Day 4',
-          'Find secluded beaches',
-          'Suggest luxury heritage stays',
-        ],
-      };
-    }
-
-    if (lower.includes('food') || lower.includes('eat') || currentMood === 'Foodie') {
-      return {
-        id: `msg-${Date.now()}`,
-        sender: 'saarthi',
-        content: `🍲 **Epicurean Foodie Trail**:
-
-- **Ahmedabad**: Midnight chocolate-cheese toast and fresh kulfi at Manek Chowk, authentic Dal Baati and steamed Khaman Dhokla.
-- **Mumbai**: Irani Cafe bun muska & chai at Kyani & Co, followed by Mahesh Lunch Home butter-garlic seafood.
-- **Goa**: Fresh sea-bass recheado, poi bread, and coconut feni cocktails at a beachfront shack in Vagator.`,
-        timestamp: 'Just now',
-        suggestedActions: [
-          'Add Food Crawl to Itinerary',
-          'Show vegetarian options',
-          'Suggest top rated cafes',
-        ],
-        recommendations: {
-          activities: mockActivities.filter((a) => a.category === 'Food'),
-        },
-      };
-    }
-
-    // Default intelligent response
     return {
       id: `msg-${Date.now()}`,
       sender: 'saarthi',
-      content: `I've analyzed your travel preferences ${currentMood ? `for **${currentMood}** vibe` : ''}. 
+      content: `I've analyzed your travel request ${currentMood ? `with a **${currentMood}** vibe` : ''}. 
 
-Here are customized recommendations tailored for you:
-- Optimize your route to minimize transit fatigue.
-- Pick top-rated local activities with verified photography spots.
-- Keep your budget balanced with real-time expense tracking.
+Here are customized insights for your next steps:
+- **Intelligent Pacing**: Ensure smooth transit windows between key attractions.
+- **Local Highlights**: Prioritize unique cultural landmarks and scenic sunset viewpoints.
+- **Expense Control**: Real-time tracking keeps budget in check.
 
-Try asking me: *"Plan a 5-day trip from Ahmedabad"*, *"Reduce my trip budget"*, or *"Find hidden gems in Goa"*!`,
+Ask me to build a custom multi-day itinerary, recommend hidden local food spots, or adjust trip pacing!`,
       timestamp: 'Just now',
       suggestedActions: [
         'Plan a 5-day trip from Ahmedabad',
-        'Find hidden gems',
+        'Find hidden gems in Goa',
         'Suggest scenic sunset spots',
       ],
     };
@@ -160,7 +189,6 @@ Try asking me: *"Plan a 5-day trip from Ahmedabad"*, *"Reduce my trip budget"*, 
 
     let day = 1;
     dest.forEach((cityName) => {
-      // Arrival / check-in
       items.push({
         id: `itin-gen-${day}-1`,
         dayNumber: day,
@@ -174,7 +202,6 @@ Try asking me: *"Plan a 5-day trip from Ahmedabad"*, *"Reduce my trip budget"*, 
         currency: trip.currency || '₹',
       });
 
-      // City activity
       const cityAct = mockActivities.find((a) => a.cityName.toLowerCase() === cityName.toLowerCase());
       if (cityAct) {
         items.push({
@@ -193,7 +220,6 @@ Try asking me: *"Plan a 5-day trip from Ahmedabad"*, *"Reduce my trip budget"*, 
         });
       }
 
-      // Evening leisure
       items.push({
         id: `itin-gen-${day}-3`,
         dayNumber: day,

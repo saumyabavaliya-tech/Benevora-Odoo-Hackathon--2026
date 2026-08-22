@@ -181,10 +181,10 @@ export const CreateTrip: React.FC = () => {
         {/* Wizard Stepper */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-blue-600">
+            <span className="text-xs font-bold uppercase tracking-wider text-blue-400">
               Trip Creation Wizard
             </span>
-            <span className="text-xs font-bold text-slate-500">Step {currentStep} of 5</span>
+            <span className="text-xs font-bold text-slate-300">Step {currentStep} of 5</span>
           </div>
 
           <div className="grid grid-cols-5 gap-2">
@@ -193,8 +193,8 @@ export const CreateTrip: React.FC = () => {
                 key={step}
                 className={`h-2 rounded-full transition-all ${
                   step <= currentStep
-                    ? 'bg-blue-600'
-                    : 'bg-slate-200'
+                    ? 'bg-blue-500 shadow-sm shadow-blue-500/50'
+                    : 'bg-white/10'
                 }`}
               />
             ))}
@@ -206,11 +206,11 @@ export const CreateTrip: React.FC = () => {
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/80 shadow-xs space-y-6"
+            className="bg-slate-900/70 backdrop-blur-2xl p-6 sm:p-8 rounded-3xl border border-white/15 shadow-xl space-y-6"
           >
             <div>
-              <h2 className="text-xl font-extrabold text-slate-900">Name & Dates for Your Journey</h2>
-              <p className="text-xs text-slate-500 mt-1">
+              <h2 className="text-xl font-extrabold text-white">Name & Dates for Your Journey</h2>
+              <p className="text-xs text-slate-300 mt-1">
                 Give your trip a memorable name and choose approximate dates.
               </p>
             </div>
@@ -224,7 +224,7 @@ export const CreateTrip: React.FC = () => {
               />
 
               <div>
-                <label className="text-sm font-medium text-slate-700 block mb-1.5">
+                <label className="text-sm font-semibold text-slate-200 block mb-1.5">
                   Trip Description
                 </label>
                 <textarea
@@ -232,7 +232,7 @@ export const CreateTrip: React.FC = () => {
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="What's the theme or purpose of this getaway?"
-                  className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                  className="w-full rounded-xl border border-white/15 bg-slate-900/80 px-3.5 py-2.5 text-sm text-white placeholder:text-slate-400 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500/30 backdrop-blur-md"
                 />
               </div>
 
@@ -252,7 +252,7 @@ export const CreateTrip: React.FC = () => {
               </div>
 
               <div>
-                <label className="text-sm font-medium text-slate-700 block mb-1.5">
+                <label className="text-sm font-semibold text-slate-200 block mb-1.5">
                   Cover Image URL
                 </label>
                 <Input
@@ -272,7 +272,7 @@ export const CreateTrip: React.FC = () => {
                       alt="Preset"
                       onClick={() => setCoverImage(imgUrl)}
                       className={`w-20 h-14 rounded-xl object-cover cursor-pointer border-2 transition-all ${
-                        coverImage === imgUrl ? 'border-blue-600 scale-105' : 'border-transparent opacity-70 hover:opacity-100'
+                        coverImage === imgUrl ? 'border-blue-500 scale-105 ring-2 ring-blue-500/40' : 'border-white/10 opacity-70 hover:opacity-100'
                       }`}
                       fallbackSrc={DEFAULT_FALLBACK_IMAGE}
                     />
@@ -288,11 +288,11 @@ export const CreateTrip: React.FC = () => {
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/80 shadow-xs space-y-6"
+            className="bg-slate-900/70 backdrop-blur-2xl p-6 sm:p-8 rounded-3xl border border-white/15 shadow-xl space-y-6"
           >
             <div>
-              <h2 className="text-xl font-extrabold text-slate-900">What's Your Travel Vibe?</h2>
-              <p className="text-xs text-slate-500 mt-1">
+              <h2 className="text-xl font-extrabold text-white">What's Your Travel Vibe?</h2>
+              <p className="text-xs text-slate-300 mt-1">
                 Select styles so Travel Saarthi can tailor activity suggestions.
               </p>
             </div>
@@ -307,14 +307,14 @@ export const CreateTrip: React.FC = () => {
                     onClick={() => handleToggleStyle(style)}
                     className={`p-4 rounded-2xl border text-left flex items-center justify-between transition-all cursor-pointer ${
                       isSelected
-                        ? 'bg-blue-50 border-blue-500 ring-2 ring-blue-500/20'
-                        : 'bg-white border-slate-200/80 hover:border-slate-300 hover:bg-slate-50'
+                        ? 'bg-blue-600/25 border-blue-400 shadow-md ring-2 ring-blue-500/40 backdrop-blur-xl'
+                        : 'bg-slate-900/80 border-white/15 hover:border-white/30 hover:bg-slate-800/80'
                     }`}
                   >
-                    <span className="text-sm font-bold text-slate-900">{style}</span>
+                    <span className="text-sm font-bold text-white">{style}</span>
                     <div
                       className={`w-5 h-5 rounded-full flex items-center justify-center ${
-                        isSelected ? 'bg-blue-600 text-white' : 'border border-slate-300'
+                        isSelected ? 'bg-blue-600 text-white' : 'border border-white/30'
                       }`}
                     >
                       {isSelected && <Check className="w-3.5 h-3.5" />}
@@ -331,11 +331,11 @@ export const CreateTrip: React.FC = () => {
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/80 shadow-xs space-y-6"
+            className="bg-slate-900/70 backdrop-blur-2xl p-6 sm:p-8 rounded-3xl border border-white/15 shadow-xl space-y-6"
           >
             <div>
-              <h2 className="text-xl font-extrabold text-slate-900">Budget & Transit Preferences</h2>
-              <p className="text-xs text-slate-500 mt-1">
+              <h2 className="text-xl font-extrabold text-white">Budget & Transit Preferences</h2>
+              <p className="text-xs text-slate-300 mt-1">
                 Keep spending aligned with dynamic chart trackers and alerts.
               </p>
             </div>
@@ -351,21 +351,21 @@ export const CreateTrip: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-slate-700 block mb-1.5">Currency</label>
+                  <label className="text-sm font-semibold text-slate-200 block mb-1.5">Currency</label>
                   <select
                     value={currency}
                     onChange={(e) => setCurrency(e.target.value)}
-                    className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-900 focus:border-blue-500 focus:outline-none"
+                    className="w-full rounded-xl border border-white/15 bg-slate-900/80 text-white px-3.5 py-2.5 text-sm focus:border-blue-400 focus:outline-none"
                   >
-                    <option value="₹">₹ INR</option>
-                    <option value="$">$ USD</option>
-                    <option value="€">€ EUR</option>
+                    <option value="₹" className="bg-slate-900 text-white">₹ INR</option>
+                    <option value="$" className="bg-slate-900 text-white">$ USD</option>
+                    <option value="€" className="bg-slate-900 text-white">€ EUR</option>
                   </select>
                 </div>
               </div>
 
               <div>
-                <label className="text-sm font-medium text-slate-700 block mb-1.5">
+                <label className="text-sm font-semibold text-slate-200 block mb-1.5">
                   Preferred Transport Mode
                 </label>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -376,8 +376,8 @@ export const CreateTrip: React.FC = () => {
                       onClick={() => setPrimaryTransit(mode)}
                       className={`p-3 rounded-xl border text-xs font-bold transition-all ${
                         primaryTransit === mode
-                          ? 'bg-slate-900 text-white shadow-2xs'
-                          : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+                          ? 'bg-blue-600 text-white border-blue-400 shadow-md shadow-blue-600/30'
+                          : 'bg-slate-900/80 text-slate-200 border-white/15 hover:bg-slate-800 hover:text-white'
                       }`}
                     >
                       {mode}
@@ -394,59 +394,59 @@ export const CreateTrip: React.FC = () => {
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/80 shadow-xs space-y-6"
+            className="bg-slate-900/70 backdrop-blur-2xl p-6 sm:p-8 rounded-3xl border border-white/15 shadow-xl space-y-6"
           >
             <div>
-              <h2 className="text-xl font-extrabold text-slate-900">Add Destinations & Duration</h2>
-              <p className="text-xs text-slate-500 mt-1">
+              <h2 className="text-xl font-extrabold text-white">Add Destinations & Duration</h2>
+              <p className="text-xs text-slate-300 mt-1">
                 Order your route sequence (e.g., Ahmedabad ➔ Mumbai ➔ Goa).
               </p>
             </div>
 
             {/* Selected Stops list */}
             <div className="space-y-2.5">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-300">
                 Route Order ({selectedStops.length} Stops • {totalDays} Total Days)
               </span>
 
               {selectedStops.map((stop, idx) => (
                 <div
                   key={stop.city.id}
-                  className="flex items-center justify-between p-3.5 bg-slate-50 rounded-2xl border border-slate-200"
+                  className="flex items-center justify-between p-3.5 bg-slate-950/60 rounded-2xl border border-white/10 backdrop-blur-md"
                 >
                   <div className="flex items-center gap-3">
-                    <span className="w-7 h-7 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-xs">
+                    <span className="w-7 h-7 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-xs shadow-sm border border-blue-400/30">
                       {idx + 1}
                     </span>
                     <SafeImage
                       src={stop.city.imageUrl}
                       alt={stop.city.name}
-                      className="w-10 h-10 rounded-lg object-cover"
+                      className="w-10 h-10 rounded-lg object-cover ring-1 ring-white/10"
                       fallbackSrc={DEFAULT_FALLBACK_IMAGE}
                     />
                     <div>
-                      <h4 className="text-sm font-bold text-slate-900">{stop.city.name}</h4>
+                      <h4 className="text-sm font-bold text-white">{stop.city.name}</h4>
                       <p className="text-[11px] text-slate-400">{stop.city.region}</p>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-3">
                     <div className="flex items-center gap-1.5 text-xs">
-                      <span className="text-slate-500">Days:</span>
+                      <span className="text-slate-300 font-medium">Days:</span>
                       <input
                         type="number"
                         min="1"
                         max="14"
                         value={stop.days}
                         onChange={(e) => handleDaysChange(stop.city.id, Number(e.target.value))}
-                        className="w-12 px-2 py-1 bg-white border border-slate-200 rounded-lg text-center font-bold text-slate-900"
+                        className="w-12 px-2 py-1 bg-slate-900 border border-white/20 rounded-lg text-center font-bold text-white focus:outline-none focus:border-blue-400"
                       />
                     </div>
 
                     <button
                       type="button"
                       onClick={() => handleRemoveCityStop(stop.city.id)}
-                      className="p-1.5 text-slate-400 hover:text-rose-600 rounded-lg"
+                      className="p-1.5 text-slate-400 hover:text-rose-400 hover:bg-rose-500/20 rounded-lg transition-colors"
                       title="Remove city"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -457,8 +457,8 @@ export const CreateTrip: React.FC = () => {
             </div>
 
             {/* Search & Add City catalog */}
-            <div className="space-y-3 pt-4 border-t border-slate-100">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+            <div className="space-y-3 pt-4 border-t border-white/10">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-300">
                 Add More Cities to Route
               </span>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -472,15 +472,15 @@ export const CreateTrip: React.FC = () => {
                       onClick={() => handleAddCityStop(city)}
                       className={`p-2.5 rounded-xl border text-left flex items-center justify-between text-xs font-bold transition-all ${
                         isAdded
-                          ? 'bg-slate-100 border-slate-200 text-slate-400 cursor-not-allowed'
-                          : 'bg-white hover:bg-blue-50 hover:border-blue-300 text-slate-800'
+                          ? 'bg-slate-950/40 border-white/5 text-slate-500 cursor-not-allowed'
+                          : 'bg-slate-900/80 hover:bg-white/10 border-white/15 text-white'
                       }`}
                     >
                       <span className="truncate">{city.name}</span>
                       {isAdded ? (
-                        <Check className="w-3.5 h-3.5 text-emerald-600" />
+                        <Check className="w-3.5 h-3.5 text-emerald-400" />
                       ) : (
-                        <Plus className="w-3.5 h-3.5 text-blue-600" />
+                        <Plus className="w-3.5 h-3.5 text-blue-400" />
                       )}
                     </button>
                   );
@@ -495,21 +495,21 @@ export const CreateTrip: React.FC = () => {
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/80 shadow-xs space-y-6"
+            className="bg-slate-900/70 backdrop-blur-2xl p-6 sm:p-8 rounded-3xl border border-white/15 shadow-xl space-y-6"
           >
             <div>
-              <h2 className="text-xl font-extrabold text-slate-900">Review & AI Generation</h2>
-              <p className="text-xs text-slate-500 mt-1">
+              <h2 className="text-xl font-extrabold text-white">Review & AI Generation</h2>
+              <p className="text-xs text-slate-300 mt-1">
                 Travel Saarthi will generate a day-by-day smart itinerary draft.
               </p>
             </div>
 
-            <div className="p-5 rounded-2xl bg-gradient-to-br from-indigo-50 to-blue-50 border border-indigo-100 space-y-3">
-              <div className="flex items-center gap-2 text-indigo-700 font-bold text-sm">
-                <Sparkles className="w-4 h-4 text-indigo-600" />
+            <div className="p-5 rounded-2xl bg-gradient-to-br from-indigo-950/80 to-blue-950/80 border border-indigo-500/30 backdrop-blur-xl space-y-3">
+              <div className="flex items-center gap-2 text-indigo-300 font-bold text-sm">
+                <Sparkles className="w-4 h-4 text-indigo-300" />
                 <span>Travel Saarthi Co-Pilot Ready</span>
               </div>
-              <p className="text-xs text-indigo-900 leading-relaxed">
+              <p className="text-xs text-indigo-100 leading-relaxed">
                 We've configured your <strong>{totalDays}-day</strong> route across{' '}
                 <strong>{selectedStops.map((s) => s.city.name).join(' ➔ ')}</strong> with a{' '}
                 <strong>{formatCurrency(totalBudget, currency)}</strong> budget focused on{' '}
@@ -518,15 +518,15 @@ export const CreateTrip: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-2 gap-4 text-xs">
-              <div className="p-3 bg-slate-50 rounded-xl border border-slate-100">
+              <div className="p-3 bg-slate-950/60 rounded-xl border border-white/10">
                 <span className="text-slate-400 font-semibold uppercase block">Route</span>
-                <span className="font-bold text-slate-900 mt-0.5 block">
+                <span className="font-bold text-white mt-0.5 block">
                   {selectedStops.map((s) => s.city.name).join(' ➔ ')}
                 </span>
               </div>
-              <div className="p-3 bg-slate-50 rounded-xl border border-slate-100">
+              <div className="p-3 bg-slate-950/60 rounded-xl border border-white/10">
                 <span className="text-slate-400 font-semibold uppercase block">Budget</span>
-                <span className="font-bold text-slate-900 mt-0.5 block">
+                <span className="font-bold text-white mt-0.5 block">
                   {formatCurrency(totalBudget, currency)}
                 </span>
               </div>

@@ -56,10 +56,10 @@ export const ItineraryTimeline: React.FC<ItineraryTimelineProps> = ({
         <div key={dayNum} className="space-y-4 relative">
           {/* Day Milestone Badge */}
           <div className="flex items-center gap-3 relative -left-6 sm:-left-8">
-            <div className="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center font-extrabold text-xs shadow-md ring-4 ring-white z-10">
+            <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-extrabold text-xs shadow-lg shadow-blue-600/40 ring-4 ring-slate-900 z-10 border border-blue-400/30">
               D{dayNum}
             </div>
-            <div className="bg-white px-3 py-1 rounded-full border border-slate-200/80 shadow-2xs text-xs font-bold text-slate-800">
+            <div className="bg-slate-900/80 backdrop-blur-xl px-3 py-1 rounded-full border border-white/15 shadow-md text-xs font-bold text-slate-100">
               Day {dayNum} • {formatDateString(dayItems[0]?.date || '2026-09-10', 'EEEE, MMM d')}
             </div>
           </div>
@@ -76,11 +76,11 @@ export const ItineraryTimeline: React.FC<ItineraryTimelineProps> = ({
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.25, delay: idx * 0.05 }}
-                  className="relative flex items-start gap-3.5 p-4 bg-white rounded-2xl border border-slate-200/80 shadow-2xs hover:shadow-md transition-all group"
+                  className="relative flex items-start gap-3.5 p-4 bg-slate-900/75 backdrop-blur-2xl rounded-2xl border border-white/15 shadow-lg hover:border-white/30 transition-all group"
                 >
                   {/* Icon Node */}
                   <div
-                    className={`w-7 h-7 rounded-xl flex items-center justify-center shrink-0 ring-4 ${currentType.color} shadow-xs`}
+                    className={`w-7 h-7 rounded-xl flex items-center justify-center shrink-0 ring-4 ring-slate-900/80 ${currentType.color} shadow-xs`}
                   >
                     <Icon className="w-3.5 h-3.5" />
                   </div>
@@ -89,23 +89,23 @@ export const ItineraryTimeline: React.FC<ItineraryTimelineProps> = ({
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-2">
                       <div>
-                        <span className="text-[11px] font-bold text-blue-600 block">
+                        <span className="text-[11px] font-bold text-blue-400 block">
                           {item.time}
                         </span>
-                        <h4 className="text-sm font-bold text-slate-900 mt-0.5">{item.title}</h4>
+                        <h4 className="text-sm font-bold text-white mt-0.5">{item.title}</h4>
                       </div>
-                      <span className="text-xs font-extrabold text-slate-900 shrink-0">
+                      <span className="text-xs font-extrabold text-white shrink-0">
                         {formatCurrency(item.estimatedCost, item.currency || currency)}
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-1 text-xs text-slate-500 mt-1">
+                    <div className="flex items-center gap-1 text-xs text-slate-300 mt-1">
                       <MapPin className="w-3 h-3 text-slate-400 shrink-0" />
                       <span className="truncate">{item.locationName} ({item.cityName})</span>
                     </div>
 
                     {item.notes && (
-                      <p className="text-xs text-slate-500 mt-2 bg-slate-50 p-2 rounded-lg italic">
+                      <p className="text-xs text-slate-200 mt-2 bg-slate-950/60 p-2.5 rounded-xl border border-white/10 italic">
                         {item.notes}
                       </p>
                     )}

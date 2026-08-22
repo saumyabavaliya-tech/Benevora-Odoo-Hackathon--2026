@@ -13,34 +13,34 @@ export const TripProgress: React.FC<TripProgressProps> = ({ trip }) => {
   const progressPercent = Math.min(100, Math.round((completedCount / totalCount) * 100));
 
   return (
-    <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs space-y-3">
+    <div className="bg-slate-900/70 backdrop-blur-2xl p-5 rounded-3xl border border-white/15 shadow-xl space-y-3">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="p-1.5 bg-blue-50 text-blue-600 rounded-lg">
+        <div className="flex items-center gap-2.5">
+          <div className="p-2 bg-blue-500/20 text-blue-300 border border-blue-400/30 rounded-xl backdrop-blur-md">
             <Compass className="w-4 h-4" />
           </div>
           <div>
-            <h4 className="text-sm font-bold text-slate-900">Trip Readiness & Planning</h4>
-            <p className="text-xs text-slate-500">
+            <h4 className="text-sm font-bold text-white">Trip Readiness & Planning</h4>
+            <p className="text-xs text-slate-300">
               {trip.destinations.length} Stops • {trip.itinerary.length} scheduled items
             </p>
           </div>
         </div>
-        <span className="text-sm font-extrabold text-blue-600">{progressPercent}% Planned</span>
+        <span className="text-sm font-black text-blue-400">{progressPercent}% Planned</span>
       </div>
 
-      <div className="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden relative">
+      <div className="w-full bg-slate-950/80 border border-white/10 h-2.5 rounded-full overflow-hidden relative">
         <motion.div
           initial={{ width: 0 }}
           animate={{ width: `${Math.max(15, progressPercent)}%` }}
           transition={{ duration: 0.8, ease: 'easeOut' }}
-          className="h-full bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full relative"
+          className="h-full bg-gradient-to-r from-blue-600 to-indigo-500 rounded-full relative shadow-md shadow-blue-500/50"
         />
       </div>
 
-      <div className="flex items-center justify-between text-xs text-slate-500 pt-1">
+      <div className="flex items-center justify-between text-xs text-slate-300 pt-1">
         <span>Stops: {trip.destinations.join(' ➔ ')}</span>
-        <span className="font-semibold text-slate-700">{trip.totalDays} Total Days</span>
+        <span className="font-semibold text-slate-200">{trip.totalDays} Total Days</span>
       </div>
     </div>
   );
