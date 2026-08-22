@@ -1,0 +1,3 @@
+"""
+GlobeTrotter Backend Database Package
+"""

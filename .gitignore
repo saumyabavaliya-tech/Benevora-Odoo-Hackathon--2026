@@ -1,8 +1,30 @@
+# Node
 node_modules/
 build/
 dist/
 coverage/
-.DS_Store
-*.log
-.env*
+package-lock.json
+bun.lock
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+venv/
+env/
+.venv/
+*.db
+*.sqlite3
+
+# Environment
+.env
+.env.local
+.env.*.local
 !.env.example
+
+# OS & Logs
+.DS_Store
+Thumbs.db
+*.log
